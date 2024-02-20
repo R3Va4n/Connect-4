@@ -1,3 +1,5 @@
+use std::io;
+
 fn is_full(my_board: [[bool; 6]; 7]) -> bool {
    return my_board.iter().all(|&row| row.iter().all(|&cell| cell));
 }
@@ -133,6 +135,33 @@ fn print_board(my_board: [[[bool; 6]; 7]; 3]){
 
 }
 
+fn player_move(possible_moves: Vec<usize>) -> usize{
+    let mut player_move_str: String = Default::default();
+    let mut player_move_usize;
+    println!("Please write the number of your col.\n These are the possible moves:\n");
+    for i in possible_moves{
+        print!("{i}")
+    }
+    loop {
+        io::stdin()
+    .read_line(&mut player_move_str)
+    .expect("Failed to read line. Your fault.");
+        match player_move_str.parse::<usize>() {
+            Ok(result) => {
+                player_move_usize = result;
+            }
+            Err(_) => {
+                // Failed to parse
+                println!("Error: Failed to parse string to usize");
+            }}
+        if possible_moves.contains(&player_move_usize){
+            return player_move_usize;
+        } else{
+            println!("not a valid number, idiot");
+        }
+    }
+}
+
 fn main() {
     let mut board: [[[bool; 6]; 7]; 3] = [[[false; 6]; 7]; 3];
 
@@ -146,8 +175,7 @@ fn main() {
             _ => {println!("Error: False return Type");}
         }
         let moves = get_set_bit_indices(possible_moves(board));
-        make_move(&mut board, moves[0], true);
-        println!("Move: {}", moves[0]);
+        make_move(&mut board, player_move(moves), true);
         print_board(board);
 
         let moves = get_set_bit_indices(possible_moves(board));
