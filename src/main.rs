@@ -66,13 +66,6 @@ fn possible_moves(my_board: [[[bool; 6]; 7]; 3]) -> u8 {
 }
 
 fn make_move(my_board: &mut [[[bool; 6]; 7]; 3], col: usize, player_is_1: bool){
-    let mut player_board: [[bool; 6]; 7];
-    if player_is_1{
-        player_board = my_board[0];
-    } else {
-        player_board = my_board[1];
-    }
-
     //find highest point in the column, very crude and hardcodet divide and conquer algo
     let height: usize;
     if my_board[2][col][3] { //point > 3
@@ -98,7 +91,11 @@ fn make_move(my_board: &mut [[[bool; 6]; 7]; 3], col: usize, player_is_1: bool){
     }
 
     //actually make a move, so change the arrays
-    player_board[col][height] = true;
+    if player_is_1{
+        my_board[0][col][height] = true;
+    } else {
+        my_board[1][col][height] = true;
+    }
     my_board[2][col][height] = true;
 
 }
@@ -117,9 +114,19 @@ fn get_set_bit_indices(value: u8) -> Vec<usize> { //thx Chat GPT
 
 fn print_board(my_board: [[[bool; 6]; 7]; 3]){
     println!("\nBoard:\n");
-    for x in my_board[2]{
-        for y in x{
-            print!("{y}|")
+    for x in 0..7{
+        for y in 0..6{
+            if my_board[0][x][y] && my_board[2][x][y]{
+                print!("  X  |")
+            } else  if my_board[1][x][y] && my_board[2][x][y]{
+                print!("  O  |")
+            } else if !my_board[2][x][y]{
+                print!("     |")
+            } else{
+                print!("corrupted")
+            }
+                
+
         }
         print!("\n------------------------------------\n")
     }
@@ -129,8 +136,7 @@ fn print_board(my_board: [[[bool; 6]; 7]; 3]){
 fn main() {
     let mut board: [[[bool; 6]; 7]; 3] = [[[false; 6]; 7]; 3];
 
-    let mut i = 0;
-    while i < 9{
+    while true{
         let board_state = evaluate_board(board);
         match board_state {
             0 => {}
@@ -143,6 +149,10 @@ fn main() {
         make_move(&mut board, moves[0], true);
         println!("Move: {}", moves[0]);
         print_board(board);
-        i += 1;
+
+        let moves = get_set_bit_indices(possible_moves(board));
+        make_move(&mut board, moves[0], false);
+        println!("Move: {}", moves[0]);
+        print_board(board);
     }
 }
