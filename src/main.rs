@@ -67,7 +67,12 @@ fn possible_moves(my_board: [[[bool; 6]; 7]; 3]) -> u8 {
     return result;
 }
 
-fn make_move(my_board: &mut [[[bool; 6]; 7]; 3], col: usize, player_is_1: bool){
+fn make_move_new_board(mut my_board: [[[bool; 6]; 7]; 3], col: usize, player_is_1: bool) -> [[[bool; 6]; 7]; 3]{//TODO: tests
+    make_move(&mut my_board, col, player_is_1);
+    return my_board;
+}
+
+fn make_move(my_board: &mut [[[bool; 6]; 7]; 3], col: usize, player_is_1: bool){//TODO tests
     //find highest point in the column, very crude and hardcodet divide and conquer algo
     let height: usize;
     if my_board[2][col][3] { //point > 3
@@ -161,6 +166,23 @@ fn player_move(possible_moves: Vec<usize>) -> usize {
         }
     }
 }
+/*
+fn minimax(my_board: [[[bool; 6]; 7]; 3], player_is_1: bool) -> u8{
+    let board_eval = evaluate_board(my_board);
+    if board_eval == 1 || board_eval == 2 || board_eval == 3{
+        return board_eval;
+    }
+    if player_is_1{
+        best_eval = 2;
+        for i in possible_moves(my_board){
+            if evaluate_board(make_move_new_board(my_board, i, player_is_1)) 
+        }
+    }
+    else {
+        best_eval = 1;
+    }
+}
+ */
 
 fn main() {
     let mut board: [[[bool; 6]; 7]; 3] = [[[false; 6]; 7]; 3];
