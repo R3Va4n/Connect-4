@@ -54,15 +54,14 @@ fn evaluate_board(my_board: [[[bool; 6]; 7]; 3]) -> u8 {
     //0: none, 1: player1, 2: player 2, 3: stalemate
     if check_winner(my_board[0]){
         return 1;
-    } else if check_winner(my_board[1]) {
-        return 2;
-    } else {
-        if is_full(my_board[2]){//stalemate check
-            return 3;
-        } else {
-            return 0;
-        }
     }
+    if check_winner(my_board[1]) {
+        return 2;
+    }
+    if is_full(my_board[2]){//stalemate check
+        return 3;
+    }
+    return 0;
 }
 
 fn possible_moves(my_board: [[[bool; 6]; 7]; 3]) -> u8 {
@@ -204,6 +203,7 @@ fn main() {
             3 => {println!("Draw, Board is Full"); break;}
             _ => {println!("Error: False return Type");}
         }
+
         let moves = get_set_bit_indices(possible_moves(board));
         make_move(&mut board, player_move(moves), true);
         print_board(board);
