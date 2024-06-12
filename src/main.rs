@@ -64,14 +64,14 @@ fn evaluate_board(my_board: [[[bool; 6]; 7]; 3]) -> u8 {
     return 0;
 }
 
-fn possible_moves(my_board: [[[bool; 6]; 7]; 3]) -> u8 {
-    let mut result: u8 = 0x7F;
+fn possible_moves(my_board: [[[bool; 6]; 7]; 3]) -> Vec<usize> {
+    let mut indices = Vec::new();
     for col in 0..7{
-        if my_board[2][col][5]{
-            result &= !(1 << col);  
+        if !my_board[2][col][5]{
+            indices.push(col);
         }
     }
-    return result;
+    return indices;
 }
 
 fn make_move_new_board(mut my_board: [[[bool; 6]; 7]; 3], col: usize, player_is_1: bool) -> [[[bool; 6]; 7]; 3]{//TODO: tests
@@ -112,18 +112,6 @@ fn make_move(my_board: &mut [[[bool; 6]; 7]; 3], col: usize, player_is_1: bool){
     }
     my_board[2][col][height] = true;
 
-}
-
-fn get_set_bit_indices(value: u8) -> Vec<usize> { //thx Chat GPT
-    let mut indices = Vec::new();
-
-    for i in 0..8 {
-        if (value & (1 << i)) != 0 {
-            indices.push(i);
-        }
-    }
-
-    indices
 }
 
 fn print_board(my_board: [[[bool; 6]; 7]; 3]){
@@ -204,11 +192,11 @@ fn main() {
             _ => {println!("Error: False return Type");}
         }
 
-        let moves = get_set_bit_indices(possible_moves(board));
+        let moves = possible_moves(board);
         make_move(&mut board, player_move(moves), true);
         print_board(board);
 
-        let moves = get_set_bit_indices(possible_moves(board));
+        let moves = possible_moves(board);
         make_move(&mut board, moves[0], false);
         println!("Move: {}", moves[0]);
         print_board(board);
