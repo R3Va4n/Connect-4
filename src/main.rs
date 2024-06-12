@@ -4,9 +4,8 @@ fn is_full(my_board: [[bool; 6]; 7]) -> bool {
    return my_board.iter().all(|&row| row.iter().all(|&cell| cell));
 }
 
-fn check_winner(my_board: [[bool; 6]; 7]) ->bool{ 
-
-    for row in 0..7{ // check vertical connects
+fn check_vertical_connections(my_board: [[bool; 6]; 7]) ->bool{
+    for row in 0..7{
         if my_board[row][0] && my_board[row][1] && my_board[row][2] && my_board[row][3]{
             return true;
         } else if my_board[row][1] && my_board[row][2] && my_board[row][3] && my_board[row][4] {
@@ -14,8 +13,11 @@ fn check_winner(my_board: [[bool; 6]; 7]) ->bool{
         } else if my_board[row][2] && my_board[row][3] && my_board[row][4] && my_board[row][5] {
             return true;
         }
-    }
+    }  
+    return false;
+}
 
+fn check_horizontal_connections(my_board: [[bool; 6]; 7]) ->bool{
     for col in 0..6{// check horizontal connects
         if my_board[0][col] && my_board[1][col] && my_board[2][col] && my_board[3][col]{
             return true;
@@ -27,8 +29,10 @@ fn check_winner(my_board: [[bool; 6]; 7]) ->bool{
             return true;
         }
     }
+    return false;
+}
 
-    //check diagonals
+fn check_diagonal_connections(my_board: [[bool; 6]; 7]) ->bool {
     for row in 0..3{ 
         for col in 0..4{
             if my_board[row][col] && my_board[row+1][col+1] && my_board[row+2][col+2] && my_board[row+3][col+3]{ //left bottom to right top
@@ -39,7 +43,11 @@ fn check_winner(my_board: [[bool; 6]; 7]) ->bool{
             } 
         } 
     }
-    return false; //no matches, no winner here
+    return false;
+}
+
+fn check_winner(my_board: [[bool; 6]; 7]) ->bool{ 
+    return check_vertical_connections(my_board) || check_horizontal_connections(my_board) || check_diagonal_connections(my_board)
 }
 
 fn evaluate_board(my_board: [[[bool; 6]; 7]; 3]) -> u8 {
