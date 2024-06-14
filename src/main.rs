@@ -119,13 +119,13 @@ fn make_move(my_board: &mut [[[bool; 6]; 7]; 3], col: usize, player_is_1: bool){
 
 fn print_board(my_board: [[[bool; 6]; 7]; 3]){
     println!("\nBoard:\n");
-    for x in 0..7{
-        for y in 0..6{
-            if my_board[0][x][y] && my_board[2][x][y]{
+    for y in 0..6{
+        for x in 0..7{
+            if my_board[0][x][5-y] && my_board[2][x][5-y]{
                 print!("  X  |")
-            } else  if my_board[1][x][y] && my_board[2][x][y]{
+            } else  if my_board[1][x][5-y] && my_board[2][x][5-y]{
                 print!("  O  |")
-            } else if !my_board[2][x][y]{
+            } else if !my_board[2][x][5-y]{
                 print!("     |")
             } else{
                 print!("corrupted")
@@ -133,7 +133,7 @@ fn print_board(my_board: [[[bool; 6]; 7]; 3]){
                 
 
         }
-        print!("\n------------------------------------\n")
+        print!("\n------------------------------------------\n")
     }
 
 }
