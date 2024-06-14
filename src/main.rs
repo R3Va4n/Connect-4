@@ -79,32 +79,35 @@ fn make_move_new_board(mut my_board: [[[bool; 6]; 7]; 3], col: usize, player_is_
     return my_board;
 }
 
-fn make_move(my_board: &mut [[[bool; 6]; 7]; 3], col: usize, player_is_1: bool){//TODO tests
+fn find_highest_point(my_board: &mut [[[bool; 6]; 7]; 3], col: usize) -> usize{//TODO tests
     //find highest point in the column, very crude and hardcodet divide and conquer algo
-    let height: usize;
     if my_board[2][col][3] { //point > 3
         if my_board[2][col][4]{//point > 4 so its 5 as this is max height (remember height is 6, but 5 is max col)
-            height = 5;
+            return 5;
         } else {
-            height = 4;
+            return 4;
         }
     } else { //point < 3
         if my_board[2][col][1]{ //1 < point <= 3
             if my_board[2][col][2]{
-                height = 3;
+                return 3;
             } else {
-                height = 2;
+                return 2;
             }
         } else { // point <= 1
             if my_board[2][col][0]{
-                height = 1;
+                return 1;
             } else {
-                height = 0;
+                return 0;
             }
         }
     }
+}
 
-    //actually make a move, so change the arrays
+fn make_move(my_board: &mut [[[bool; 6]; 7]; 3], col: usize, player_is_1: bool){//TODO tests
+    let height: usize;
+    height = find_highest_point(my_board, col);
+
     if player_is_1{
         my_board[0][col][height] = true;
     } else {
